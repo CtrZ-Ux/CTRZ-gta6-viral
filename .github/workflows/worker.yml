@@ -1,0 +1,30 @@
+name: Process TikTok Queue
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Every 5 minutes
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  worker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4  # Leave 1 min buffer before cron kills it
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run worker (process queue once and exit)
+        run: node worker.js --once
+        env:
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          TIKTOK_CLIENT_SECRET: ${{ secrets.TIKTOK_CLIENT_SECRET }}
