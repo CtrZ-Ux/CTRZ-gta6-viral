@@ -1,0 +1,53 @@
+{
+  "name": "gta6-viral-tiktok-webhook",
+  "version": "1.0.0",
+  "description": "TikTok Webhook handler for GTA 6 Viral Shorts Bot with BullMQ queue",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod",
+    "deploy:preview": "vercel",
+    "worker": "node worker.js",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --ci --coverage"
+  },
+  "dependencies": {
+    "bullmq": "^5.8.0",
+    "ioredis": "^5.4.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.0",
+    "vercel": "^34.0.0",
+    "babel-jest": "^29.7.0",
+    "@babel/preset-env": "^7.24.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(bullmq|ioredis)/)"
+    ],
+    "moduleFileExtensions": ["js", "mjs"],
+    "testMatch": ["**/__tests__/**/*.test.js"],
+    "collectCoverageFrom": [
+      "api/**/*.js",
+      "!api/**/*.test.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 75,
+        "functions": 60,
+        "lines": 68,
+        "statements": 68
+      }
+    }
+  }
+}
