@@ -196,10 +196,29 @@ if (RUN_ONCE) {
   // Wait for worker to be ready (handles connection)
   await worker.waitUntilReady();
 
-  // Drain the queue: process all available jobs
-  await worker.drain();
+  // Import Queue to check/drain jobs
+  const { Queue } = await import("bullmq");
+  const queue = new Queue("tiktok-events", { connection: redis });
 
-  console.log("[Worker] Queue drained, shutting down...");
+  // Wait for active jobs to complete (max 30 seconds)
+  const startTime = Date.now();
+  const maxWait = 30000;
+
+  while (Date.now() - startTime < maxWait) {
+    const counts = await queue.getJobCounts();
+    const active = counts.active || 0;
+    const waiting = counts.waiting || 0;
+
+    if (active === 0 && waiting === 0) {
+      console.log("[Worker] Queue empty, shutting down...");
+      break;
+    }
+
+    console.log(`[Worker] Waiting for jobs: active=${active}, waiting=${waiting}`);
+    await new Promise(r => setTimeout(r, 2000));
+  }
+
+  await queue.close();
   await shutdown();
 } else {
   console.log("[Worker] Started, waiting for jobs...");
