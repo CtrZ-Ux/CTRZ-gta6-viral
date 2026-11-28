@@ -207,4 +207,4 @@ export default async function handler(req, res) {
 }
 
 // Export for health check
-export { getRedis, getEventQueue };
+export { getRedis, getEventQueue };// force deploy Sat Nov 28 01:13:13     2026
