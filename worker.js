@@ -193,9 +193,7 @@ process.on("SIGINT", shutdown);
 if (RUN_ONCE) {
   console.log("[Worker] Running in --once mode: processing available jobs then exiting");
 
-  await redis.connect();
-
-  // Wait for worker to be ready
+  // Wait for worker to be ready (handles connection)
   await worker.waitUntilReady();
 
   // Drain the queue: process all available jobs
