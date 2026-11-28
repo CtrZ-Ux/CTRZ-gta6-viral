@@ -2,18 +2,22 @@
   "version": 2,
   "builds": [
     { "src": "api/tiktok/webhook.js", "use": "@vercel/node" },
-    { "src": "api/tiktok/health.js", "use": "@vercel/node" }
+    { "src": "api/tiktok/health.js", "use": "@vercel/node" },
+    { "src": "terms-of-service.html", "use": "@vercel/static" },
+    { "src": "privacy-policy.html", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/api/tiktok/webhook", "dest": "/api/tiktok/webhook.js", "methods": ["POST", "OPTIONS"] },
-    { "src": "/api/tiktok/health", "dest": "/api/tiktok/health.js", "methods": ["GET", "OPTIONS"] }
+    { "src": "/api/tiktok/webhook", "dest": "/api/tiktok/webhook.js", "methods": ["GET", "POST", "OPTIONS"] },
+    { "src": "/api/tiktok/health", "dest": "/api/tiktok/health.js", "methods": ["GET", "OPTIONS"] },
+    { "src": "/terms-of-service", "dest": "/terms-of-service.html" },
+    { "src": "/privacy-policy", "dest": "/privacy-policy.html" }
   ],
   "headers": [
     {
       "source": "/api/tiktok/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "POST, GET, OPTIONS" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
         { "key": "Access-Control-Allow-Headers", "value": "Content-Type, X-TikTok-Signature" }
       ]
     }
