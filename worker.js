@@ -25,7 +25,7 @@ if (!REDIS_URL) {
 
 // Redis connection
 const redis = new IORedis(REDIS_URL, {
-  maxRetriesPerRequest: 3,
+  maxRetriesPerRequest: null, // Required by BullMQ v5
   retryStrategy: (times) => Math.min(times * 100, 3000),
   enableReadyCheck: true,
   lazyConnect: true,
